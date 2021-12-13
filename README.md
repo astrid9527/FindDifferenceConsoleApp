@@ -1,2 +1,189 @@
-# FindDifferenceConsoleApp
-æ‰¾èŒ¬ç±»æ¸¸æˆè¾…åŠ©
+# C# µ÷ÓÃ´óÄ®²å¼şÊµÏÖ QQ ´ó¼ÒÀ´ÕÒ²çÓÎÏ·¸¨Öú
+
+Ô­ÎÄµØÖ·£º<https://www.developerastrid.com/computer-vision/lets-find-the-difference/>
+
+## Ò»¡¢Ë¼Â·
+
+1. µ÷ÓÃ´óÄ®²å¼ş `BindWindowEx` ·½·¨°ó¶¨ÓÎÏ·´°¿Ú£»
+2. µ÷ÓÃ´óÄ®²å¼ş `Capture` ½ØÍ¼£¬×ó±ßÒ»ÕÅ£¬ÓÒ±ßÒ»ÕÅ£»
+3. ¶Ô±ÈÁ½ÕÅÍ¼Æ¬£¬ÕÒ³ö²»Í¬µÄµØ·½¡£
+
+## ¶ş¡¢´óÄ®²å¼ş°ó¶¨ÓÎÏ·´°¿Ú
+
+ÏÈ»ñÈ¡ÓÎÏ·´°¿Ú¾ä±ú
+
+```csharp
+//»ñÈ¡´°¿Ú¾ä±ú
+var hwnd = dmSoft.FindWindow("#32770", "´ó¼ÒÀ´ÕÒ²ç");
+if (hwnd == 0)
+{
+    throw new Exception("»ñÈ¡´°¿Ú¾ä±úÊ§°Ü");
+}
+```
+
+È»ºó°ó¶¨´°¿Ú
+
+```csharp
+//°ó¶¨´°¿Ú
+var bindWindowExResult = dmSoft.BindWindowEx(hwnd, "gdi", "normal", "normal", "", 0);
+
+if (bindWindowExResult == 0)
+{
+    throw new Exception("°ó¶¨´°¿ÚÊ§°Ü");
+}
+```
+
+## Èı¡¢´óÄ®²å¼ş½ØÍ¼
+
+Ê¹ÓÃ´óÄ®×ÛºÏ¹¤¾ßÕÒ³öĞèÒª½ØÍ¼µÄ×ø±ê£¬È»ºó¼ÇÏÂÀ´
+
+```csharp
+//¿í¸ß(381,286)
+var imgWidth = 381;
+var imgHeight = 286;
+var imgInterval = 76;//Á½ÕÅÍ¼µÄ¼ä¸ô
+var offsetTop = 312;//×óÆ«ÒÆ
+var offsetLeft = 93;//×óÆ«ÒÆ
+
+var x1 = offsetLeft;
+var y1 = offsetTop;
+var x2 = x1 + imgWidth;
+var y2 = y1 + imgHeight;
+
+var x3 = x2 + imgInterval;
+var y3 = y1;
+var x4 = x3 + imgWidth;
+var y4 = y2;
+```
+
+Ê¹ÓÃ `Capture` ·½·¨½ØÍ¼
+
+```csharp
+//½ØÍ¼×ó±ß
+var leftFileName = "leftFile.bmp";
+dmSoft.Capture(x1, y1, x2, y2, leftFileName);
+
+//½ØÍ¼ÓÒ±ß
+var rightFileName = "rightFile.bmp";
+dmSoft.Capture(x3, y3, x4, y4, rightFileName);
+```
+
+## ËÄ¡¢ÕÒ³öÁ½ÕÅÍ¼Æ¬²»ÏàÍ¬µÄµØ·½
+
+ÏÈÒª»ñÈ¡Í¼Æ¬Ã¿¸öÏñËØµÄÑÕÉ«Êı¾İ£¬È»ºóÔÙ¶Ô±È¡£
+
+·â×° `GetRgbValueBytes` ·½·¨£¬ÓÃÓÚ»ñÈ¡Í¼Æ¬µÄÑÕÉ«Êı¾İ
+
+```csharp
+private static byte[] GetRgbValueBytes(Bitmap bitmap)
+{
+    // ½« Bitmap Ëø¶¨µ½ÏµÍ³ÄÚ´æÖĞ
+    Rectangle rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
+    BitmapData bitmapData = bitmap.LockBits(rect, ImageLockMode.ReadOnly, bitmap.PixelFormat);
+    bitmap.UnlockBits(bitmapData);
+
+    // »ñÈ¡µÚÒ»ĞĞµÄµØÖ·
+    IntPtr ptr = bitmapData.Scan0;
+
+    // ÉùÃ÷Ò»¸öÊı×éÀ´±£´æÎ»Í¼µÄ×Ö½Ú
+    int length = Math.Abs(bitmapData.Stride) * bitmapData.Height;
+    byte[] rgbValues = new byte[length];
+
+    // ¸´ÖÆ RGB Öµµ½Êı×éÖĞ
+    Marshal.Copy(ptr, rgbValues, 0, length);
+    return rgbValues;
+}
+```
+
+·â×° `GetDifferent` ·½·¨£¬ÓÃÓÚÕÒ³öÁ½ÕÅÍ¼Æ¬²»Í¬µÄ²¿·Ö£¬²¢°Ñ²»Í¬µÄ²¿·Ö×÷Îª `Bitmap` ÀàĞÍ·µ»Ø
+
+```csharp
+/// <summary>
+/// »ñÈ¡Á½ÕÅÍ¼Æ¬µÄ²îÒì£¬½«²îÒì²¿·Ö±ê¼Çµ½Ò»ÕÅĞÂµÄÍ¼Æ¬£¬²¢·µ»ØÕâÕÅÍ¼Æ¬
+/// </summary>
+/// <param name="bitmap1">µÚÒ»ÕÅÍ¼Æ¬</param>
+/// <param name="bitmap2">µÚ¶şÕÅÍ¼Æ¬</param>
+/// <returns>²îÒìÍ¼Æ¬</returns>
+private static Bitmap GetDifferent(Bitmap bitmap1, Bitmap bitmap2)
+{
+    var bitmap1RgbValue = GetRgbValueBytes(bitmap1);
+    var bitmap2RgbValue = GetRgbValueBytes(bitmap2);
+
+    byte r1;
+    byte g1;
+    byte b1;
+
+    byte r2;
+    byte g2;
+    byte b2;
+
+    byte r3;
+    byte g3;
+    byte b3;
+
+    // Èİ²î
+    var allowance = 40;
+
+    byte[] rgbValues = new byte[bitmap1RgbValue.Length];
+    for (int i = 0; i < bitmap1RgbValue.Length - 1; i += 3)
+    {
+        r1 = r3 = bitmap1RgbValue[i + 2];
+        g1 = g3 = bitmap1RgbValue[i + 1];
+        b1 = b3 = bitmap1RgbValue[i];
+
+        r2 = bitmap2RgbValue[i + 2];
+        g2 = bitmap2RgbValue[i + 1];
+        b2 = bitmap2RgbValue[i];
+
+
+        // °Ñ·ûºÏÌõ¼şµÄÑÕÉ«¸ÄÎª°×É«£¬·ñÔò¸ÄÎªºÚÉ«
+        if ((r1 + allowance <= r2 || r1 - allowance >= r2)
+            || (g1 + allowance <= g2 || g1 - allowance >= g2)
+            || (b1 + allowance <= b2 || b1 - allowance >= b2))
+        {
+            r3 = 255;
+            g3 = 255;
+            b3 = 255;
+        }
+        else
+        {
+            r3 = 0;
+            g3 = 0;
+            b3 = 0;
+        }
+
+        rgbValues[i + 2] = r3;
+        rgbValues[i + 1] = g3;
+        rgbValues[i] = b3;
+    }
+
+    // Éú³ÉÒ»ÕÅĞÂµÄÍ¼Æ¬
+    Bitmap bitmap3 = new Bitmap(bitmap1.Width, bitmap1.Height, bitmap2.PixelFormat);
+
+    BitmapData bitmapData = GetBitmapData(bitmap3);
+
+    Marshal.Copy(rgbValues, 0, bitmapData.Scan0, rgbValues.Length);
+
+    bitmap1.Dispose();
+    bitmap2.Dispose();
+
+    return bitmap3;
+}
+```
+
+## Îå¡¢ÏÔÊ¾²»Í¬²¿·ÖµÄÍ¼Æ¬
+
+µ÷ÓÃ´óÄ®²å¼ş `CreateFoobarCustom`£¬½«²îÒìÍ¼Æ¬ÏÔÊ¾³öÀ´
+
+```c
+//±ê¼Ç
+foobar = dmSoft.CreateFoobarCustom(hwnd, x1, y1, tempFileName, "000000", 1.0);
+dmSoft.FoobarFillRect(foobar, 0, 0, x2, y2, "ff0000");
+dmSoft.FoobarUpdate(foobar);
+```
+
+## Áù¡¢ÑİÊ¾
+
+ÏÂÍ¼ÖĞ£¬ºìÉ«ÇøÓò¾ÍÊÇÁ½ÕÅÍ¼Æ¬²»Í¬Ö®´¦¡£
+
+![C# µ÷ÓÃ´óÄ®²å¼şÊµÏÖ QQ ´ó¼ÒÀ´ÕÒ²çÓÎÏ·¸¨Öú](https://cdn.developerastrid.com/202112131615353.png)
