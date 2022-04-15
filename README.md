@@ -4,11 +4,11 @@
 
 ## 一、思路
 
-1. 调用大漠插件 `BindWindowEx` 方法绑定游戏窗口；
-2. 调用大漠插件 `Capture` 截图，左边一张，右边一张；
+1. C# 调用大漠插件 `BindWindowEx` 方法绑定游戏窗口；
+2. C# 调用大漠插件 `Capture` 截图，左边一张，右边一张；
 3. 对比两张图片，找出不同的地方。
 
-## 二、大漠插件绑定游戏窗口
+## 二、C# 调用大漠插件绑定游戏窗口
 
 先获取游戏窗口句柄
 
@@ -33,7 +33,7 @@ if (bindWindowExResult == 0)
 }
 ```
 
-## 三、大漠插件截图
+## 三、C# 调用大漠插件截图
 
 使用大漠综合工具找出需要截图的坐标，然后记下来
 
@@ -173,7 +173,7 @@ private static Bitmap GetDifferent(Bitmap bitmap1, Bitmap bitmap2)
 
 ## 五、显示不同部分的图片
 
-调用大漠插件 `CreateFoobarCustom`，将差异图片显示出来
+C# 调用大漠插件 `CreateFoobarCustom`，将差异图片显示出来
 
 ```c
 //标记
@@ -186,4 +186,4 @@ dmSoft.FoobarUpdate(foobar);
 
 下图中，红色区域就是两张图片不同之处。
 
-![C# 调用大漠插件实现 QQ 大家来找茬游戏辅助](https://cdn.developerastrid.com/202112131615353.png)
+![C# 调用大漠插件实现 QQ 大家来找茬游戏辅助](https://cdn.developerastrid.com/img/202112131615353.png)
