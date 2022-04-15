@@ -1,6 +1,8 @@
 # C# 调用大漠插件实现 QQ 大家来找茬游戏辅助
 
-原文地址：<https://www.developerastrid.com/computer-vision/csharp-dm-find-fault/>
+原文地址：[C# 调用大漠插件实现 QQ 大家来找茬游戏辅助](https://www.developerastrid.com/computer-vision/csharp-dm-find-fault/)
+
+本文介绍如何使用 C# 调用大漠插件实现 QQ 大家来找茬游戏辅助。
 
 ## 一、思路
 
@@ -187,3 +189,9 @@ dmSoft.FoobarUpdate(foobar);
 下图中，红色区域就是两张图片不同之处。
 
 ![C# 调用大漠插件实现 QQ 大家来找茬游戏辅助](https://cdn.developerastrid.com/img/202112131615353.png)
+
+## 七、源码地址
+
+到这里，本文已经介绍了如何使用 C# 调用大漠插件实现 QQ 大家来找茬游戏辅助。
+
+源码地址：[https://github.com/astrid9527/FindDifferenceConsoleApp](https://github.com/astrid9527/FindDifferenceConsoleApp)
