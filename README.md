@@ -1,49 +1,49 @@
-# C# µ÷ÓÃ´óÄ®²å¼şÊµÏÖ QQ ´ó¼ÒÀ´ÕÒ²çÓÎÏ·¸¨Öú
+# C# è°ƒç”¨å¤§æ¼ æ’ä»¶å®ç° QQ å¤§å®¶æ¥æ‰¾èŒ¬æ¸¸æˆè¾…åŠ©
 
-Ô­ÎÄµØÖ·£º<https://www.developerastrid.com/computer-vision/lets-find-the-difference/>
+åŸæ–‡åœ°å€ï¼š<https://www.developerastrid.com/computer-vision/csharp-dm-find-fault/>
 
-## Ò»¡¢Ë¼Â·
+## ä¸€ã€æ€è·¯
 
-1. µ÷ÓÃ´óÄ®²å¼ş `BindWindowEx` ·½·¨°ó¶¨ÓÎÏ·´°¿Ú£»
-2. µ÷ÓÃ´óÄ®²å¼ş `Capture` ½ØÍ¼£¬×ó±ßÒ»ÕÅ£¬ÓÒ±ßÒ»ÕÅ£»
-3. ¶Ô±ÈÁ½ÕÅÍ¼Æ¬£¬ÕÒ³ö²»Í¬µÄµØ·½¡£
+1. è°ƒç”¨å¤§æ¼ æ’ä»¶ `BindWindowEx` æ–¹æ³•ç»‘å®šæ¸¸æˆçª—å£ï¼›
+2. è°ƒç”¨å¤§æ¼ æ’ä»¶ `Capture` æˆªå›¾ï¼Œå·¦è¾¹ä¸€å¼ ï¼Œå³è¾¹ä¸€å¼ ï¼›
+3. å¯¹æ¯”ä¸¤å¼ å›¾ç‰‡ï¼Œæ‰¾å‡ºä¸åŒçš„åœ°æ–¹ã€‚
 
-## ¶ş¡¢´óÄ®²å¼ş°ó¶¨ÓÎÏ·´°¿Ú
+## äºŒã€å¤§æ¼ æ’ä»¶ç»‘å®šæ¸¸æˆçª—å£
 
-ÏÈ»ñÈ¡ÓÎÏ·´°¿Ú¾ä±ú
+å…ˆè·å–æ¸¸æˆçª—å£å¥æŸ„
 
 ```csharp
-//»ñÈ¡´°¿Ú¾ä±ú
-var hwnd = dmSoft.FindWindow("#32770", "´ó¼ÒÀ´ÕÒ²ç");
+//è·å–çª—å£å¥æŸ„
+var hwnd = dmSoft.FindWindow("#32770", "å¤§å®¶æ¥æ‰¾èŒ¬");
 if (hwnd == 0)
 {
-    throw new Exception("»ñÈ¡´°¿Ú¾ä±úÊ§°Ü");
+    throw new Exception("è·å–çª—å£å¥æŸ„å¤±è´¥");
 }
 ```
 
-È»ºó°ó¶¨´°¿Ú
+ç„¶åç»‘å®šçª—å£
 
 ```csharp
-//°ó¶¨´°¿Ú
+//ç»‘å®šçª—å£
 var bindWindowExResult = dmSoft.BindWindowEx(hwnd, "gdi", "normal", "normal", "", 0);
 
 if (bindWindowExResult == 0)
 {
-    throw new Exception("°ó¶¨´°¿ÚÊ§°Ü");
+    throw new Exception("ç»‘å®šçª—å£å¤±è´¥");
 }
 ```
 
-## Èı¡¢´óÄ®²å¼ş½ØÍ¼
+## ä¸‰ã€å¤§æ¼ æ’ä»¶æˆªå›¾
 
-Ê¹ÓÃ´óÄ®×ÛºÏ¹¤¾ßÕÒ³öĞèÒª½ØÍ¼µÄ×ø±ê£¬È»ºó¼ÇÏÂÀ´
+ä½¿ç”¨å¤§æ¼ ç»¼åˆå·¥å…·æ‰¾å‡ºéœ€è¦æˆªå›¾çš„åæ ‡ï¼Œç„¶åè®°ä¸‹æ¥
 
 ```csharp
-//¿í¸ß(381,286)
+//å®½é«˜(381,286)
 var imgWidth = 381;
 var imgHeight = 286;
-var imgInterval = 76;//Á½ÕÅÍ¼µÄ¼ä¸ô
-var offsetTop = 312;//×óÆ«ÒÆ
-var offsetLeft = 93;//×óÆ«ÒÆ
+var imgInterval = 76;//ä¸¤å¼ å›¾çš„é—´éš”
+var offsetTop = 312;//å·¦åç§»
+var offsetLeft = 93;//å·¦åç§»
 
 var x1 = offsetLeft;
 var y1 = offsetTop;
@@ -56,54 +56,54 @@ var x4 = x3 + imgWidth;
 var y4 = y2;
 ```
 
-Ê¹ÓÃ `Capture` ·½·¨½ØÍ¼
+ä½¿ç”¨ `Capture` æ–¹æ³•æˆªå›¾
 
 ```csharp
-//½ØÍ¼×ó±ß
+//æˆªå›¾å·¦è¾¹
 var leftFileName = "leftFile.bmp";
 dmSoft.Capture(x1, y1, x2, y2, leftFileName);
 
-//½ØÍ¼ÓÒ±ß
+//æˆªå›¾å³è¾¹
 var rightFileName = "rightFile.bmp";
 dmSoft.Capture(x3, y3, x4, y4, rightFileName);
 ```
 
-## ËÄ¡¢ÕÒ³öÁ½ÕÅÍ¼Æ¬²»ÏàÍ¬µÄµØ·½
+## å››ã€æ‰¾å‡ºä¸¤å¼ å›¾ç‰‡ä¸ç›¸åŒçš„åœ°æ–¹
 
-ÏÈÒª»ñÈ¡Í¼Æ¬Ã¿¸öÏñËØµÄÑÕÉ«Êı¾İ£¬È»ºóÔÙ¶Ô±È¡£
+å…ˆè¦è·å–å›¾ç‰‡æ¯ä¸ªåƒç´ çš„é¢œè‰²æ•°æ®ï¼Œç„¶åå†å¯¹æ¯”ã€‚
 
-·â×° `GetRgbValueBytes` ·½·¨£¬ÓÃÓÚ»ñÈ¡Í¼Æ¬µÄÑÕÉ«Êı¾İ
+å°è£… `GetRgbValueBytes` æ–¹æ³•ï¼Œç”¨äºè·å–å›¾ç‰‡çš„é¢œè‰²æ•°æ®
 
 ```csharp
 private static byte[] GetRgbValueBytes(Bitmap bitmap)
 {
-    // ½« Bitmap Ëø¶¨µ½ÏµÍ³ÄÚ´æÖĞ
+    // å°† Bitmap é”å®šåˆ°ç³»ç»Ÿå†…å­˜ä¸­
     Rectangle rect = new Rectangle(0, 0, bitmap.Width, bitmap.Height);
     BitmapData bitmapData = bitmap.LockBits(rect, ImageLockMode.ReadOnly, bitmap.PixelFormat);
     bitmap.UnlockBits(bitmapData);
 
-    // »ñÈ¡µÚÒ»ĞĞµÄµØÖ·
+    // è·å–ç¬¬ä¸€è¡Œçš„åœ°å€
     IntPtr ptr = bitmapData.Scan0;
 
-    // ÉùÃ÷Ò»¸öÊı×éÀ´±£´æÎ»Í¼µÄ×Ö½Ú
+    // å£°æ˜ä¸€ä¸ªæ•°ç»„æ¥ä¿å­˜ä½å›¾çš„å­—èŠ‚
     int length = Math.Abs(bitmapData.Stride) * bitmapData.Height;
     byte[] rgbValues = new byte[length];
 
-    // ¸´ÖÆ RGB Öµµ½Êı×éÖĞ
+    // å¤åˆ¶ RGB å€¼åˆ°æ•°ç»„ä¸­
     Marshal.Copy(ptr, rgbValues, 0, length);
     return rgbValues;
 }
 ```
 
-·â×° `GetDifferent` ·½·¨£¬ÓÃÓÚÕÒ³öÁ½ÕÅÍ¼Æ¬²»Í¬µÄ²¿·Ö£¬²¢°Ñ²»Í¬µÄ²¿·Ö×÷Îª `Bitmap` ÀàĞÍ·µ»Ø
+å°è£… `GetDifferent` æ–¹æ³•ï¼Œç”¨äºæ‰¾å‡ºä¸¤å¼ å›¾ç‰‡ä¸åŒçš„éƒ¨åˆ†ï¼Œå¹¶æŠŠä¸åŒçš„éƒ¨åˆ†ä½œä¸º `Bitmap` ç±»å‹è¿”å›
 
 ```csharp
 /// <summary>
-/// »ñÈ¡Á½ÕÅÍ¼Æ¬µÄ²îÒì£¬½«²îÒì²¿·Ö±ê¼Çµ½Ò»ÕÅĞÂµÄÍ¼Æ¬£¬²¢·µ»ØÕâÕÅÍ¼Æ¬
+/// è·å–ä¸¤å¼ å›¾ç‰‡çš„å·®å¼‚ï¼Œå°†å·®å¼‚éƒ¨åˆ†æ ‡è®°åˆ°ä¸€å¼ æ–°çš„å›¾ç‰‡ï¼Œå¹¶è¿”å›è¿™å¼ å›¾ç‰‡
 /// </summary>
-/// <param name="bitmap1">µÚÒ»ÕÅÍ¼Æ¬</param>
-/// <param name="bitmap2">µÚ¶şÕÅÍ¼Æ¬</param>
-/// <returns>²îÒìÍ¼Æ¬</returns>
+/// <param name="bitmap1">ç¬¬ä¸€å¼ å›¾ç‰‡</param>
+/// <param name="bitmap2">ç¬¬äºŒå¼ å›¾ç‰‡</param>
+/// <returns>å·®å¼‚å›¾ç‰‡</returns>
 private static Bitmap GetDifferent(Bitmap bitmap1, Bitmap bitmap2)
 {
     var bitmap1RgbValue = GetRgbValueBytes(bitmap1);
@@ -121,7 +121,7 @@ private static Bitmap GetDifferent(Bitmap bitmap1, Bitmap bitmap2)
     byte g3;
     byte b3;
 
-    // Èİ²î
+    // å®¹å·®
     var allowance = 40;
 
     byte[] rgbValues = new byte[bitmap1RgbValue.Length];
@@ -136,7 +136,7 @@ private static Bitmap GetDifferent(Bitmap bitmap1, Bitmap bitmap2)
         b2 = bitmap2RgbValue[i];
 
 
-        // °Ñ·ûºÏÌõ¼şµÄÑÕÉ«¸ÄÎª°×É«£¬·ñÔò¸ÄÎªºÚÉ«
+        // æŠŠç¬¦åˆæ¡ä»¶çš„é¢œè‰²æ”¹ä¸ºç™½è‰²ï¼Œå¦åˆ™æ”¹ä¸ºé»‘è‰²
         if ((r1 + allowance <= r2 || r1 - allowance >= r2)
             || (g1 + allowance <= g2 || g1 - allowance >= g2)
             || (b1 + allowance <= b2 || b1 - allowance >= b2))
@@ -157,7 +157,7 @@ private static Bitmap GetDifferent(Bitmap bitmap1, Bitmap bitmap2)
         rgbValues[i] = b3;
     }
 
-    // Éú³ÉÒ»ÕÅĞÂµÄÍ¼Æ¬
+    // ç”Ÿæˆä¸€å¼ æ–°çš„å›¾ç‰‡
     Bitmap bitmap3 = new Bitmap(bitmap1.Width, bitmap1.Height, bitmap2.PixelFormat);
 
     BitmapData bitmapData = GetBitmapData(bitmap3);
@@ -171,19 +171,19 @@ private static Bitmap GetDifferent(Bitmap bitmap1, Bitmap bitmap2)
 }
 ```
 
-## Îå¡¢ÏÔÊ¾²»Í¬²¿·ÖµÄÍ¼Æ¬
+## äº”ã€æ˜¾ç¤ºä¸åŒéƒ¨åˆ†çš„å›¾ç‰‡
 
-µ÷ÓÃ´óÄ®²å¼ş `CreateFoobarCustom`£¬½«²îÒìÍ¼Æ¬ÏÔÊ¾³öÀ´
+è°ƒç”¨å¤§æ¼ æ’ä»¶ `CreateFoobarCustom`ï¼Œå°†å·®å¼‚å›¾ç‰‡æ˜¾ç¤ºå‡ºæ¥
 
 ```c
-//±ê¼Ç
+//æ ‡è®°
 foobar = dmSoft.CreateFoobarCustom(hwnd, x1, y1, tempFileName, "000000", 1.0);
 dmSoft.FoobarFillRect(foobar, 0, 0, x2, y2, "ff0000");
 dmSoft.FoobarUpdate(foobar);
 ```
 
-## Áù¡¢ÑİÊ¾
+## å…­ã€æ¼”ç¤º
 
-ÏÂÍ¼ÖĞ£¬ºìÉ«ÇøÓò¾ÍÊÇÁ½ÕÅÍ¼Æ¬²»Í¬Ö®´¦¡£
+ä¸‹å›¾ä¸­ï¼Œçº¢è‰²åŒºåŸŸå°±æ˜¯ä¸¤å¼ å›¾ç‰‡ä¸åŒä¹‹å¤„ã€‚
 
-![C# µ÷ÓÃ´óÄ®²å¼şÊµÏÖ QQ ´ó¼ÒÀ´ÕÒ²çÓÎÏ·¸¨Öú](https://cdn.developerastrid.com/202112131615353.png)
+![C# è°ƒç”¨å¤§æ¼ æ’ä»¶å®ç° QQ å¤§å®¶æ¥æ‰¾èŒ¬æ¸¸æˆè¾…åŠ©](https://cdn.developerastrid.com/202112131615353.png)
